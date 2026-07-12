@@ -9,7 +9,7 @@ const protect = async (req, res, next) => {
     const authHeader = req.headers.authorization;
 
     // Expecting header format: "Authorization: Bearer <token>"
-    if (authHeader && authHeader.startsWith('Bearer')) {
+    if (authHeader && authHeader.startsWith('Bearer ')) {
       token = authHeader.split(' ')[1];
     }
 
