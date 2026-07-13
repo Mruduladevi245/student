@@ -10,7 +10,6 @@ const {
   deleteTask,
 } = require('../controllers/taskController');
 
-// Every route below requires a valid JWT (see middleware/auth.js)
 router.use(protect);
 
 router.route('/')

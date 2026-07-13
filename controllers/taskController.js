@@ -4,8 +4,6 @@ const {
   validateStatusInput,
 } = require('../utils/validators');
 
-// @route   POST /api/tasks
-// @access  Private
 const createTask = async (req, res, next) => {
   try {
     const { taskTitle, description, dueDate, status } = req.body;
@@ -16,7 +14,7 @@ const createTask = async (req, res, next) => {
     }
 
     const task = await Task.create({
-      userId: req.user._id, // comes from the `protect` middleware
+      userId: req.user._id,
       taskTitle,
       description,
       dueDate,
@@ -29,9 +27,6 @@ const createTask = async (req, res, next) => {
   }
 };
 
-// @route   GET /api/tasks
-// @access  Private
-// Supports optional ?status=Pending|Completed filter and pagination via ?page & ?limit
 const getTasks = async (req, res, next) => {
   try {
     const filter = { userId: req.user._id };
@@ -59,8 +54,6 @@ const getTasks = async (req, res, next) => {
   }
 };
 
-// @route   GET /api/tasks/:id
-// @access  Private
 const getTaskById = async (req, res, next) => {
   try {
     const task = await Task.findOne({ _id: req.params.id, userId: req.user._id });
@@ -75,8 +68,6 @@ const getTaskById = async (req, res, next) => {
   }
 };
 
-// @route   PUT /api/tasks/:id
-// @access  Private
 const updateTask = async (req, res, next) => {
   try {
     const { taskTitle, description, dueDate, status } = req.body;
@@ -91,7 +82,7 @@ const updateTask = async (req, res, next) => {
     if (dueDate !== undefined) task.dueDate = dueDate;
     if (status !== undefined) task.status = status;
 
-    const updatedTask = await task.save(); // triggers schema validation
+    const updatedTask = await task.save();
 
     res.status(200).json({ success: true, message: 'Task updated', data: updatedTask });
   } catch (error) {
@@ -99,9 +90,6 @@ const updateTask = async (req, res, next) => {
   }
 };
 
-// @route   PATCH /api/tasks/:id/status
-// @access  Private
-// Dedicated endpoint for the common "toggle Pending/Completed" action
 const updateTaskStatus = async (req, res, next) => {
   try {
     const { status } = req.body;
@@ -127,8 +115,6 @@ const updateTaskStatus = async (req, res, next) => {
   }
 };
 
-// @route   DELETE /api/tasks/:id
-// @access  Private
 const deleteTask = async (req, res, next) => {
   try {
     const task = await Task.findOneAndDelete({ _id: req.params.id, userId: req.user._id });

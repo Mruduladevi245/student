@@ -219,7 +219,7 @@ async function loadTasks() {
     const res = await api(`/tasks?${qs.toString()}`);
     renderTasks(res.data);
     state.totalPages = res.totalPages || 1;
- 
+
     // Clamp the current page if the list shrank (e.g. after a delete)
     // and the page we were on no longer exists.
     if (state.page > state.totalPages) {
@@ -239,7 +239,7 @@ async function loadTasks() {
     toast(err.message, 'error');
   }
 }
- 
+
 // Format a stored date-only value (saved as UTC midnight, since it comes
 // straight from an <input type="date">) without letting the browser's
 // local timezone shift it back a day for anyone west of UTC.
@@ -377,4 +377,3 @@ $('editForm').addEventListener('submit', async (e) => {
     showDashboard();
   }
 })();
- 

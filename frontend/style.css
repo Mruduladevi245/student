@@ -496,4 +496,3 @@ a:focus-visible {
 @media (prefers-reduced-motion: reduce) {
   .btn, .toast { animation: none !important; transition: none !important; }
 }
- 

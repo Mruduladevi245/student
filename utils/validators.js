@@ -1,6 +1,3 @@
-// Simple, dependency-free validation helpers used by the controllers.
-// Keeping these separate keeps controller functions focused on business logic.
-
 const validateRegisterInput = ({ name, email, password }) => {
   const errors = [];
 

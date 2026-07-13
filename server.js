@@ -7,17 +7,14 @@ const { notFound, errorHandler } = require('./middleware/errorHandler');
 const authRoutes = require('./routes/authRoutes');
 const taskRoutes = require('./routes/taskRoutes');
 
-// Connect to MongoDB before the server starts accepting traffic
 connectDB();
 
 const app = express();
 
-// --- Global Middleware ---
-app.use(cors());               // allow cross-origin requests (e.g. from a frontend on another port)
-app.use(express.json());       // parse incoming JSON request bodies
+app.use(cors());
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// --- Health check ---
 app.get('/', (req, res) => {
   res.status(200).json({
     success: true,
@@ -25,11 +22,9 @@ app.get('/', (req, res) => {
   });
 });
 
-// --- Routes ---
 app.use('/api/auth', authRoutes);
 app.use('/api/tasks', taskRoutes);
 
-// --- Error Handling (must be last) ---
 app.use(notFound);
 app.use(errorHandler);
 

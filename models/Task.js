@@ -4,9 +4,9 @@ const taskSchema = new mongoose.Schema(
   {
     userId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User', // links each task to the user who owns it
+      ref: 'User',
       required: true,
-      index: true, // speeds up "get all tasks for this user" queries
+      index: true,
     },
     taskTitle: {
       type: String,
@@ -34,7 +34,7 @@ const taskSchema = new mongoose.Schema(
       required: [true, 'Due date is required'],
     },
   },
-  { timestamps: true } // adds createdAt and updatedAt automatically
+  { timestamps: true }
 );
 
 module.exports = mongoose.model('Task', taskSchema);
