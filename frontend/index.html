@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Task Manager</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+ 
+  <!-- Toast notifications -->
+  <div id="toastHost" class="toast-host" aria-live="polite"></div>
+ 
+  <!-- ============ AUTH VIEW ============ -->
+  <main id="authView" class="auth-view">
+    <div class="auth-card">
+      <div class="brand">
+        <span class="brand-mark">§</span>
+        <span class="brand-name">Student Task Manager</span>
+      </div>
+ 
+      <div class="tab-row" role="tablist">
+        <button class="tab-btn is-active" id="tabLogin" role="tab">Log In</button>
+        <button class="tab-btn" id="tabRegister" role="tab">Register</button>
+      </div>
+ 
+      <!-- Login form -->
+      <form id="loginForm" class="auth-form">
+        <label class="field">
+          <span>Email</span>
+          <input type="email" id="loginEmail" placeholder="you@college.edu" required />
+        </label>
+        <label class="field">
+          <span>Password</span>
+          <input type="password" id="loginPassword" placeholder="••••••••" required />
+        </label>
+        <button type="submit" class="btn btn-primary btn-block">Log In</button>
+        <p class="form-hint">New here? <a href="#" id="goRegister">Create an account</a></p>
+      </form>
+ 
+      <!-- Register form -->
+      <form id="registerForm" class="auth-form is-hidden">
+        <label class="field">
+          <span>Full name</span>
+          <input type="text" id="regName" placeholder="Asha Rao" required minlength="2" />
+        </label>
+        <label class="field">
+          <span>Email</span>
+          <input type="email" id="regEmail" placeholder="you@college.edu" required />
+        </label>
+        <label class="field">
+          <span>Password</span>
+          <input type="password" id="regPassword" placeholder="At least 6 characters" required minlength="6" />
+        </label>
+        <button type="submit" class="btn btn-primary btn-block">Create Account</button>
+        <p class="form-hint">Already registered? <a href="#" id="goLogin">Log in</a></p>
+      </form>
+    </div>
+  </main>
+ 
+  <!-- ============ DASHBOARD VIEW ============ -->
+  <div id="dashView" class="dash-view is-hidden">
+    <header class="topbar">
+      <div class="topbar-brand">
+        <span class="brand-mark">§</span>
+        <span class="brand-name">Student Task Manager</span>
+      </div>
+      <div class="topbar-user">
+        <span id="userName" class="user-name">—</span>
+        <button id="logoutBtn" class="btn btn-ghost">Log Out</button>
+      </div>
+    </header>
+ 
+    <div class="dash-shell">
+      <!-- Left: stats + new task -->
+      <aside class="sidebar">
+        <section class="stat-block">
+          <h2 class="section-eyebrow">Overview</h2>
+          <div class="stat-grid">
+            <div class="stat-card">
+              <span class="stat-num" id="statTotal">0</span>
+              <span class="stat-label">Total</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-num" id="statPending">0</span>
+              <span class="stat-label">Pending</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-num" id="statDone">0</span>
+              <span class="stat-label">Completed</span>
+            </div>
+          </div>
+        </section>
+ 
+        <section class="new-task-block">
+          <h2 class="section-eyebrow">New Task</h2>
+          <form id="taskForm" class="task-form">
+            <label class="field">
+              <span>Title</span>
+              <input type="text" id="taskTitle" placeholder="Finish DBMS assignment" required minlength="3" maxlength="100" />
+            </label>
+            <label class="field">
+              <span>Description</span>
+              <textarea id="taskDescription" rows="3" placeholder="Optional notes"></textarea>
+            </label>
+            <label class="field">
+              <span>Due date</span>
+              <input type="date" id="taskDueDate" required />
+            </label>
+            <button type="submit" class="btn btn-primary btn-block">Add Task</button>
+          </form>
+        </section>
+      </aside>
+ 
+      <!-- Right: task list -->
+      <section class="task-panel">
+        <div class="panel-head">
+          <h2 class="section-eyebrow">Your Tasks</h2>
+          <div class="filter-row" id="filterRow">
+            <button class="chip is-active" data-status="">All</button>
+            <button class="chip" data-status="Pending">Pending</button>
+            <button class="chip" data-status="Completed">Completed</button>
+          </div>
+        </div>
+ 
+        <div id="taskList" class="task-list">
+          <!-- task cards injected here -->
+        </div>
+ 
+        <div id="emptyState" class="empty-state is-hidden">
+          <span class="empty-mark">✎</span>
+          <p>No tasks here yet. Add one on the left to get started.</p>
+        </div>
+ 
+        <div class="pagination" id="pagination">
+          <button class="btn btn-ghost" id="prevPage">← Prev</button>
+          <span id="pageInfo" class="page-info">Page 1 of 1</span>
+          <button class="btn btn-ghost" id="nextPage">Next →</button>
+        </div>
+      </section>
+    </div>
+  </div>
+ 
+  <!-- ============ EDIT TASK MODAL ============ -->
+  <div id="editModal" class="modal-backdrop is-hidden">
+    <div class="modal-card">
+      <h3 class="modal-title">Edit Task</h3>
+      <form id="editForm" class="task-form">
+        <input type="hidden" id="editTaskId" />
+        <label class="field">
+          <span>Title</span>
+          <input type="text" id="editTitle" required minlength="3" maxlength="100" />
+        </label>
+        <label class="field">
+          <span>Description</span>
+          <textarea id="editDescription" rows="3"></textarea>
+        </label>
+        <label class="field">
+          <span>Due date</span>
+          <input type="date" id="editDueDate" required />
+        </label>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-ghost" id="cancelEdit">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+ 
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
