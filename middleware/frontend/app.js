@@ -219,12 +219,6 @@ async function loadTasks() {
     const res = await api(`/tasks?${qs.toString()}`);
     renderTasks(res.data);
     state.totalPages = res.totalPages || 1;
- 
-    // Clamp the current page if the list shrank (e.g. after a delete)
-    // and the page we were on no longer exists.
-    if (state.page > state.totalPages) {
-      state.page = state.totalPages;
-    }
     $('pageInfo').textContent = `Page ${res.page} of ${state.totalPages}`;
  
     // Stats: fetch the two counts alongside the current list
@@ -238,19 +232,6 @@ async function loadTasks() {
   } catch (err) {
     toast(err.message, 'error');
   }
-}
- 
-// Format a stored date-only value (saved as UTC midnight, since it comes
-// straight from an <input type="date">) without letting the browser's
-// local timezone shift it back a day for anyone west of UTC.
-function formatDueDate(dateStr) {
-  const d = new Date(dateStr);
-  return d.toLocaleDateString(undefined, {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-    timeZone: 'UTC',
-  });
 }
  
 function renderTasks(tasks) {
@@ -268,7 +249,7 @@ function renderTasks(tasks) {
     const card = document.createElement('div');
     card.className = 'task-card';
     const isDone = task.status === 'Completed';
-    const due = formatDueDate(task.dueDate);
+    const due = new Date(task.dueDate).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
  
     card.innerHTML = `
       <div class="task-main">
